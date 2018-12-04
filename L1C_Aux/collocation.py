@@ -142,7 +142,7 @@ def eval_cloud_mask(cloud_array,bt_array):
         cloud_frac = -1
         std = -1
     else:
-        mask2 = (cloud_array[~mask] < 0.0001)
+        mask2 = (cloud_array[~mask] < 0.1)
         cloud_frac = float(len(cloud_array[~mask][mask2]))/float(len(cloud_array[~mask]))
         std = -1
         if len(cloud_array[~mask][mask2]) >= 3:

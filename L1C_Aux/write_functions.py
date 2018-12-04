@@ -71,14 +71,15 @@ def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
     #Cloud fraction
     var_cloud_frac.valid_min ='0'
     var_cloud_frac.valid_max = '1'
-    var_cloud_frac.long_name = 'Cloud fraction calculated from AVHRR GAC data'
+    var_cloud_frac.long_name = 'Definitely cloudy fraction calculated from AVHRR GAC data'\
+        +' (pclr threshold = 0.1).'
     #Cloud top height
     var_cloud_height.units = 'km'
     var_cloud_height.long_name = 'Cloud top height calcuated using BT difference from'\
         +' surface simulations and the adiabatic lapse rate'
     #Cloud Std
     var_cloud_std.units = 'Kelvin'
-    var_cloud_std.long_name = '11 micron standard deviation of AVHRR cloudy pixels '\
+    var_cloud_std.long_name = '11 micron standard deviation of AVHRR definitely cloudy pixels '\
         +'(or three coldest pixels) within HIRS footprint'
     #Obs Std
     var_obs_std.long_name = 'Standard deviation of AVHRR GAC observations within '\
@@ -130,7 +131,7 @@ def create_output(obs,a_obs,time,outfile):
                                         zlib=True,complevel=6,shuffle=True)
     var_cloud_height = output.createVariable('Cloud_Height','f',['y','x'],\
                                         zlib=True,complevel=6,shuffle=True)
-    var_cloud_std = output.createVariable('Cloud_STD','f',['y','x'],\
+    var_cloud_std = output.createVariable('Cloudy_STD','f',['y','x'],\
                                         zlib=True,complevel=6,shuffle=True)
     var_obs_std = output.createVariable('AVHRR_Obs_STD','f',['avhrr_channel','y','x'],\
                                         zlib=True,complevel=6,shuffle=True)
