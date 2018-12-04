@@ -107,22 +107,37 @@ def create_output(obs,a_obs,time,outfile):
     output.createDimension('y',time.shape[0])
     output.createDimension('x',time.shape[1])
     
-    var_rtm = output.createVariable('HIRS_RTM','f',['hirs_channel','y','x'])
-    var_lat = output.createVariable('AVHRR_Lat','f',['y','x'])
-    var_lon = output.createVariable('AVHRR_Lon','f',['y','x'])
-    var_flag = output.createVariable('AVHRR_Flag','f',['y','x'])
-    var_hlat = output.createVariable('HIRS_Lat','f',['y','x'])
-    var_hlon = output.createVariable('HIRS_Lon','f',['y','x'])
-    var_hflag = output.createVariable('HIRS_Flag','f',['y','x'])
+    var_rtm = output.createVariable('HIRS_RTM','f',['hirs_channel','y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_lat = output.createVariable('AVHRR_Lat','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_lon = output.createVariable('AVHRR_Lon','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_flag = output.createVariable('AVHRR_Flag','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_hlat = output.createVariable('HIRS_Lat','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_hlon = output.createVariable('HIRS_Lon','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_hflag = output.createVariable('HIRS_Flag','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
     var_a_obs = output.createVariable('AVHRR_Observations','f',\
-                                          ['avhrr_channel','y','x'])
-    var_a_noise = output.createVariable('AVHRR_Noise','f',['avhrr_channel','y','x'])
-    var_cloud_frac = output.createVariable('Cloud_Fraction','f',['y','x'])
-    var_cloud_height = output.createVariable('Cloud_Height','f',['y','x'])
-    var_cloud_std = output.createVariable('Cloud_STD','f',['y','x'])
-    var_obs_std = output.createVariable('AVHRR_Obs_STD','f',['avhrr_channel','y','x'])
-    var_n = output.createVariable('N_AVHRR','d',['y','x'])
-    var_likelihood = output.createVariable('HIRS_likelihood','f',['y','x'])
+                                          ['avhrr_channel','y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_a_noise = output.createVariable('AVHRR_Noise','f',['avhrr_channel','y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_cloud_frac = output.createVariable('Cloud_Fraction','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_cloud_height = output.createVariable('Cloud_Height','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_cloud_std = output.createVariable('Cloud_STD','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_obs_std = output.createVariable('AVHRR_Obs_STD','f',['avhrr_channel','y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_n = output.createVariable('N_AVHRR','d',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_likelihood = output.createVariable('HIRS_likelihood','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
                                            
 
     var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
