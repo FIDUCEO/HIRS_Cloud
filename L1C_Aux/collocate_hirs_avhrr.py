@@ -154,7 +154,8 @@ if __name__ in '__main__':
                         fileobj,var_rtm,var_lat,var_lon,var_flag,\
                             var_hlat,var_hlon,var_hflag,var_a_obs,var_a_noise, \
                             var_cloud_frac,var_cloud_height,var_cloud_std,\
-                            var_obs_std,var_n,var_likelihood \
+                            var_obs_std,var_n,var_likelihood,var_rtm_land, \
+                            var_likelihood_land \
                             = wf.create_output(hirs_obs,avhrr_obs,\
                                                    time_hirs,outfile)
 
@@ -169,7 +170,8 @@ if __name__ in '__main__':
                                                 var_flag,var_hlat,var_hlon,\
                                                 var_hflag,var_a_obs,var_a_noise,\
                                                 var_cloud_frac,var_cloud_height,\
-                                                var_cloud_std,var_obs_std,var_n,var_likelihood)
+                                                var_cloud_std,var_obs_std,var_n,var_likelihood,\
+                                                var_rtm_land,var_likelihood_land)
                     
 
                     #Make some comparison plots

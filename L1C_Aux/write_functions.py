@@ -34,14 +34,15 @@ def write_metadata(obj):
 
     return
 
-def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
-                     var_hflag,var_a_obs,var_a_noise\
-                     ,var_cloud_frac,var_cloud_height,var_cloud_std,\
-                     var_obs_std,var_n,var_likelihood):
+def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
+                     var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
+                     var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land):
 
     #HIRS RTM
     var_rtm.units = 'Kelvin'
     var_rtm.long_name = 'RTTOV clear-sky simulations for HIRS channels'
+    var_rtm_land.units = 'Kelvin'
+    var_rtm_land.long_name = 'RTTOV clear-sky simulations for HIRS channels over land'
     #GAC Lat
     var_lat.units = 'degrees North'
     var_lat.long_name = 'Closest GAC pixel to HIRS footprint latitude'
@@ -89,11 +90,13 @@ def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
     #HIRS Likelihood
     var_likelihood.long_name = 'Clear-sky likelihood'
     var_likelihood.comment = 'Spectral only clear-sky likelihood, not normalised.'
+    var_likelihood_land.long_name = 'Clear-sky likelihood over land'
+    var_likelihood_land.comment = 'Spectral only clear-sky likelihood, not normalised.'
 
-    return var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
-                     var_hflag,var_a_obs,var_a_noise,var_cloud_frac,\
-                     var_cloud_height,var_cloud_std,\
-                     var_obs_std,var_n,var_likelihood
+
+    return var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
+        var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
+        var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land
 
 
 def create_output(obs,a_obs,time,outfile):
@@ -109,6 +112,8 @@ def create_output(obs,a_obs,time,outfile):
     output.createDimension('x',time.shape[1])
     
     var_rtm = output.createVariable('HIRS_RTM','f',['hirs_channel','y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
+    var_rtm_land = output.createVariable('HIRS_RTM_Land','f',['hirs_channel','y','x'],\
                                         zlib=True,complevel=6,shuffle=True)
     var_lat = output.createVariable('AVHRR_Lat','f',['y','x'],\
                                         zlib=True,complevel=6,shuffle=True)
@@ -139,27 +144,29 @@ def create_output(obs,a_obs,time,outfile):
                                         zlib=True,complevel=6,shuffle=True)
     var_likelihood = output.createVariable('HIRS_likelihood','f',['y','x'],\
                                         zlib=True,complevel=6,shuffle=True)
+    var_likelihood_land = output.createVariable('HIRS_likelihood_land','f',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
                                            
 
-    var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
-        var_hflag,var_a_obs,var_a_noise,var_cloud_frac,var_cloud_height,\
-        var_cloud_std,var_obs_std,var_n,var_likelihood\
-        = var_metadata(var_rtm,var_lat,var_lon,var_flag,\
-                           var_hlat,var_hlon,var_hflag,var_a_obs,var_a_noise,\
-                           var_cloud_frac,var_cloud_height,var_cloud_std,\
-                           var_obs_std,var_n,var_likelihood)
+    var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
+        var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,var_obs_std,\
+        var_n,var_likelihood,var_rtm_land,var_likelihood_land\
+        = var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
+                           var_hflag,var_a_obs,var_a_noise,var_cloud_frac,\
+                           var_cloud_height,var_cloud_std,var_obs_std,var_n,\
+                           var_likelihood,var_rtm_land,var_likelihood_land)
 
 
     return output,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
         var_hflag,var_a_obs,var_a_noise,var_cloud_frac,var_cloud_height,\
-        var_cloud_std,var_obs_std,var_n,var_likelihood
+        var_cloud_std,var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land
 
 def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
                    output,hirs_min,hirs_max,cloud_frac,cloud_height,\
                    cloud_std,obs_std,n,hirs_prob,var_rtm,\
                    var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
                    var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
-                   var_obs_std,var_n,var_likelihood):
+                   var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land):
 
 
     rtm = np.zeros([obs.shape[0],obs.shape[1],obs.shape[2]])
@@ -190,6 +197,9 @@ def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
     var_obs_std[:,hirs_min:hirs_max,:] = obs_std
     var_n[hirs_min:hirs_max,:] = n
     var_likelihood[hirs_min:hirs_max,:] = hirs_prob
+    #Add empty arrays over land
+    var_rtm_land[:,:,:] = 0.0
+    var_likelihood_land[:,:] = 0.0
 
     return output
 
