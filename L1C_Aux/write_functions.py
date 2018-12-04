@@ -85,7 +85,7 @@ def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
     var_obs_std.long_name = 'Standard deviation of AVHRR GAC observations within '\
         +'HIRS footprint'
     #N
-    var_n.long_name = 'Number of valid GAC pixels for cloud fraction'
+    var_n.long_name = 'Number of valid GAC pixels'
     #HIRS Likelihood
     var_likelihood.long_name = 'Clear-sky likelihood'
     var_likelihood.comment = 'Spectral only clear-sky likelihood, not normalised.'

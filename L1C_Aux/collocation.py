@@ -119,11 +119,9 @@ def eval_cloud_mask(cloud_array,bt_array):
     """
     
     #Set invalid pclear pixels = nan
-    mask = (cloud_array < 0)
+    mask = np.where(np.logical_or(cloud_array < 0.0, bt_array < 0.0))[0]
     cloud_array[mask] = np.nan
     bt_array[:,mask] = np.nan
-    bt_mask = bt_array < 0.0
-    bt_array[bt_mask] = np.nan
     #Calculate pclear min and mean.
     cloud_mask_min = np.nanmin(cloud_array)
     cloud_mask_mean = np.nanmean(cloud_array)
@@ -156,8 +154,7 @@ def eval_cloud_mask(cloud_array,bt_array):
     for i in np.arange(0,all_std.shape[0],1):
         all_std[i] = np.nanstd(bt_array[i,:])
         mean[i] = np.nanmean(bt_array[i,:])
-#        if i == 3:
-#            print all_std[i],bt_array[i,:]
+
     n = len(cloud_array[~mask])
 
     return cloud_mask_min,cloud_mask_mean,cloud_frac,mean,std,all_std,n
