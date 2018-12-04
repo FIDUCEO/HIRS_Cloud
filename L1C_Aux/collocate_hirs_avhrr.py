@@ -128,7 +128,8 @@ if __name__ in '__main__':
                     #Co-locate the GAC and HIRS arrays
                     lat_centre,lon_centre,flag_centre,gac_as_hirs_min,\
                         gac_as_hirs_mean,gac_bt_mean,gac_bt_cloud_std,gac_bt_all_std,\
-                        cloud_frac,gac_as_hirs_dy,gac_as_hirs_n,gac_as_hirs_noise \
+                        cloud_frac,gac_as_hirs_dy,gac_as_hirs_n,gac_as_hirs_noise, \
+                        gac_as_hirs_landmask \
                         = col.collocate_gac_hirs(time_gac,time_hirs,gac_min,gac_max,\
                                                      hirs_min,hirs_max,gac_lat,gac_lon,\
                                                      gac_flags,hirs_flags,gac_prob,\
@@ -155,7 +156,7 @@ if __name__ in '__main__':
                             var_hlat,var_hlon,var_hflag,var_a_obs,var_a_noise, \
                             var_cloud_frac,var_cloud_height,var_cloud_std,\
                             var_obs_std,var_n,var_likelihood,var_rtm_land, \
-                            var_likelihood_land \
+                            var_likelihood_land,var_landmask \
                             = wf.create_output(hirs_obs,avhrr_obs,\
                                                    time_hirs,outfile)
 
@@ -166,12 +167,12 @@ if __name__ in '__main__':
                                                 fileobj,hirs_min,hirs_max,cloud_frac,\
                                                 cloud_height,gac_bt_cloud_std,\
                                                 gac_bt_all_std,gac_as_hirs_n,hirs_prob,\
-                                                var_rtm,var_lat,var_lon,\
+                                                gac_as_hirs_landmask,var_rtm,var_lat,var_lon,\
                                                 var_flag,var_hlat,var_hlon,\
                                                 var_hflag,var_a_obs,var_a_noise,\
                                                 var_cloud_frac,var_cloud_height,\
                                                 var_cloud_std,var_obs_std,var_n,var_likelihood,\
-                                                var_rtm_land,var_likelihood_land)
+                                                var_rtm_land,var_likelihood_land,var_landmask)
                     
 
                     #Make some comparison plots

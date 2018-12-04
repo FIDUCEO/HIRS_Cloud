@@ -29,6 +29,7 @@ bt_std_cloud = np.zeros([56])
 cloud_frac = np.zeros([56])
 extract_dy = np.zeros([56])
 extract_n = np.zeros([56])
+landmask = np.zeros([56])
 
 def extract_3_3(input_array,j,baseline):
 
@@ -111,7 +112,7 @@ def eval_cloud_mask(cloud_array,bt_array):
     Output: cloud_mask_min: minimum clear-sky probability
             cloud_mask_mean: mean clear-sky probability
             cloud_frac: cloud fraction in input array using clear-sky probability threshold
-                        of 0.0001
+                        of 0.1
             mean: mean 11 micron brightness temperature
             std: standard deviation of cloudy pixels or coldest three pixels where ncloud < 3.
             all_std: standard deviation of all GAC pixels in HIRS footprint
@@ -238,6 +239,7 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
     gac_as_hirs_cloud_frac = []
     gac_as_hirs_n = []
     gac_as_hirs_noise = []
+    gac_as_hirs_landmask = []
     #GAC_dy is an optional input argument
     if len(gac_dy) != 1:
          gac_as_hirs_dy = []
@@ -294,6 +296,8 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
 
             extract_noise = avhrr_noise[:,int(baseline[j])-height:int(baseline[j])+height+1,\
                                               pix_mask[j]-width:pix_mask[j]+width+1]
+            extract_landmask = avhrr_landmask[int(baseline[j])-height:int(baseline[j])+height+1,\
+                                              pix_mask[j]-width:pix_mask[j]+width+1]
 
             noise_data = np.zeros([avhrr_noise.shape[0]])
             mask_noise = extract_noise < 0.
@@ -314,6 +318,11 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
             if len(gac_dy) != 1:
                 if len(ex[0]) > 0:
                     extract_dy[j] = np.mean(ex[mask1])
+
+            if any(extract_landmask[mask1]):
+                landmask[j] = 1
+            else:
+                landmask[j] = 0
 
             if use_arr.shape == extract_cloud_mask.shape:
                 if len(extract_cloud_mask[mask1]) > 0:
@@ -337,6 +346,7 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
         bt_as_hirs_all_std = rf.concatenate_2d(bt_as_hirs_all_std,bt_std_all,i)
         gac_as_hirs_cloud_frac = concatenate(gac_as_hirs_cloud_frac,cloud_frac,i)
         gac_as_hirs_n = concatenate(gac_as_hirs_n,extract_n,i)
+        gac_as_hirs_landmask = concatenate(gac_as_hirs_landmask,landmask,i)
         if len(gac_dy) != 1:
             gac_as_hirs_dy = concatenate(gac_as_hirs_dy,extract_dy,i)
         else:
@@ -348,4 +358,4 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
 
     return lat_centre,lon_centre,flag_centre,gac_as_hirs_min,gac_as_hirs_mean,\
         bt_as_hirs_mean,bt_as_hirs_cloud_std,bt_as_hirs_all_std,gac_as_hirs_cloud_frac,\
-        gac_as_hirs_dy,gac_as_hirs_n,gac_as_hirs_noise
+        gac_as_hirs_dy,gac_as_hirs_n,gac_as_hirs_noise,gac_as_hirs_landmask

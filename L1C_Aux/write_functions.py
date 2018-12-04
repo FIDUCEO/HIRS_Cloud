@@ -36,7 +36,8 @@ def write_metadata(obj):
 
 def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
                      var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
-                     var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land):
+                     var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land,\
+                     var_landmask):
 
     #HIRS RTM
     var_rtm.units = 'Kelvin'
@@ -92,11 +93,15 @@ def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,va
     var_likelihood.comment = 'Spectral only clear-sky likelihood, not normalised.'
     var_likelihood_land.long_name = 'Clear-sky likelihood over land'
     var_likelihood_land.comment = 'Spectral only clear-sky likelihood, not normalised.'
+    #Landmask
+    var_landmask.long_name = 'AVHRR as HIRS landmask'
+    var_landmask.comment = 'If any AVHRR pixel in those collocated to HIRS footprint is land'\
+        + ' this mask as true.' 
 
 
     return var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
         var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
-        var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land
+        var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land,var_landmask
 
 
 def create_output(obs,a_obs,time,outfile):
@@ -146,27 +151,31 @@ def create_output(obs,a_obs,time,outfile):
                                         zlib=True,complevel=6,shuffle=True)
     var_likelihood_land = output.createVariable('HIRS_likelihood_land','f',['y','x'],\
                                         zlib=True,complevel=6,shuffle=True)
-                                           
+    var_landmask = output.createVariable('AVHRR_Landmask','d',['y','x'],\
+                                        zlib=True,complevel=6,shuffle=True)
 
     var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
         var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,var_obs_std,\
-        var_n,var_likelihood,var_rtm_land,var_likelihood_land\
+        var_n,var_likelihood,var_rtm_land,var_likelihood_land,var_landmask \
         = var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
                            var_hflag,var_a_obs,var_a_noise,var_cloud_frac,\
                            var_cloud_height,var_cloud_std,var_obs_std,var_n,\
-                           var_likelihood,var_rtm_land,var_likelihood_land)
+                           var_likelihood,var_rtm_land,var_likelihood_land,\
+                           var_landmask)
 
 
     return output,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
         var_hflag,var_a_obs,var_a_noise,var_cloud_frac,var_cloud_height,\
-        var_cloud_std,var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land
+        var_cloud_std,var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land,\
+        var_landmask
 
 def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
                    output,hirs_min,hirs_max,cloud_frac,cloud_height,\
-                   cloud_std,obs_std,n,hirs_prob,var_rtm,\
+                   cloud_std,obs_std,n,hirs_prob,landmask,var_rtm,\
                    var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
                    var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
-                   var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land):
+                   var_obs_std,var_n,var_likelihood,var_rtm_land,var_likelihood_land,\
+                   var_landmask):
 
 
     rtm = np.zeros([obs.shape[0],obs.shape[1],obs.shape[2]])
@@ -200,6 +209,7 @@ def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
     #Add empty arrays over land
     var_rtm_land[:,:,:] = 0.0
     var_likelihood_land[:,:] = 0.0
+    var_landmask[hirs_min:hirs_max,:] = landmask
 
     return output
 
