@@ -138,12 +138,12 @@ if __name__ in '__main__':
                     #Calculate the cloud height
                     try:
                         cloud_height = np.zeros([lat_centre.shape[0],lat_centre.shape[1]])
-                        mask = (dy[7,:,:] <= 0.)
-                        cloud_height[mask] = abs(dy[7,:,:][mask])*(1./6.)
-                        try:
-                            cloud_height[dy[7,:,:].mask] = -np.nan
-                        except:
-                            pass
+  #                      mask = (dy[7,:,:] <= 0.)
+  #                      cloud_height[mask] = abs(dy[7,:,:][mask])*(1./6.)
+  #                      try:
+  #                          cloud_height[dy[7,:,:].mask] = -np.nan
+  #                      except:
+  #                          pass
                     except:
                         pass
 
