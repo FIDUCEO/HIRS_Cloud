@@ -302,18 +302,17 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
             noise_data = np.zeros([avhrr_noise.shape[0]])
             mask_noise = extract_noise < 0.
             extract_noise[mask_noise] = np.nan
+
+            mask1 = use_arr == 1
+
             for k in np.arange(0,avhrr_noise.shape[0]):
-                squares = extract_noise[k,:]**2
+                squares = extract_noise[k,:][mask1]**2
                 bt_noise[k,j] = np.sqrt(np.nansum(squares))/len(squares)
-                if k == 3:
-                    if bt_noise[k,j] > 1:
-                        print extract_noise[k,:],bt_noise[k,j]
 
             if len(gac_dy) != 1:
                 ex = gac_dy[int(baseline[j])-height:int(baseline[j])+height+1,\
                                 pix_mask[j]-width:pix_mask[j]+width+1]
             
-            mask1 = use_arr == 1
             #Calculate 'gac_as_hirs' from extract
             if len(gac_dy) != 1:
                 if len(ex[0]) > 0:
