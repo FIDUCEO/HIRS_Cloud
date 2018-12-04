@@ -305,9 +305,18 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
 
             mask1 = use_arr == 1
 
-            for k in np.arange(0,avhrr_noise.shape[0]):
-                squares = extract_noise[k,:,:][mask1]**2
-                bt_noise[k,j] = np.sqrt(np.nansum(squares))/len(squares)
+            #These checks for the extraction shape against the use_arr shape are
+            #important at segment edges.  The central AVHRR pixel to the HIRS
+            #footprint may be found in the AVHRR segment, but the segment may not 
+            #cover the HIRS footprint in its entirety. 
+            #In this case, the data here will be invalid.  (Most likely for a few
+            #pixels at swath edges).
+            if use_arr.shape == extract_noise[0].shape:
+                for k in np.arange(0,avhrr_noise.shape[0]):
+                    squares = extract_noise[k,:,:][mask1]**2
+                    bt_noise[k,j] = np.sqrt(np.nansum(squares))/len(squares)
+            else:
+                bt_noise[k,j] = np.nan
 
             if len(gac_dy) != 1:
                 ex = gac_dy[int(baseline[j])-height:int(baseline[j])+height+1,\
@@ -318,10 +327,13 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
                 if len(ex[0]) > 0:
                     extract_dy[j] = np.mean(ex[mask1])
 
-            if any(extract_landmask[mask1]):
-                landmask[j] = 1
+            if use_arr.shape == extract_landmask.shape:
+                if any(extract_landmask[mask1]):
+                    landmask[j] = 1
+                else:
+                    landmask[j] = 0
             else:
-                landmask[j] = 0
+                landmask[j] = np.nan
 
             if use_arr.shape == extract_cloud_mask.shape:
                 if len(extract_cloud_mask[mask1]) > 0:
@@ -332,6 +344,15 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
                                                                extract_bt_mask[:,mask1])
                     except:
                         pass
+            else:
+                cloud_mask_min[j] = np.nan
+                cloud_mask_mean[j] = np.nan
+                cloud_frac[j] = np.nan
+                bt_mean[:,j] = np.nan
+                bt_std_cloud[j] = np.nan
+                bt_std_all[:,j] = np.nan
+                extract_n[j] = np.nan
+
 
         #Concatenate output
         lon_centre = concatenate(lon_centre,extract_lon,i)
