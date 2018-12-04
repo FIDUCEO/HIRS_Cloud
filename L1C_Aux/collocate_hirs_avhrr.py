@@ -151,10 +151,10 @@ if __name__ in '__main__':
                     outfile = wf.get_output_filename(args,fiduceo_filename)
 
                     if fileobj == -1:
-                        fileobj,var_obs,var_rtm,var_lat,var_lon,var_flag,\
+                        fileobj,var_rtm,var_lat,var_lon,var_flag,\
                             var_hlat,var_hlon,var_hflag,var_a_obs,var_a_noise, \
-                            var_hirs_ind,var_hirs_str,var_hirs_com,var_cloud_frac,\
-                            var_cloud_height,var_cloud_std,var_obs_std,var_n,var_likelihood \
+                            var_cloud_frac,var_cloud_height,var_cloud_std,\
+                            var_obs_std,var_n,var_likelihood \
                             = wf.create_output(hirs_obs,avhrr_obs,\
                                                    time_hirs,outfile)
 
@@ -162,14 +162,12 @@ if __name__ in '__main__':
                     fileobj = wf.write_data(hirs_obs,dy,lat_centre,lon_centre,\
                                                 flag_centre,hirs_lat,hirs_lon,\
                                                 hirs_flags,gac_bt_mean,gac_as_hirs_noise,\
-                                                fileobj,hirs_min,hirs_max,hirs_ind,\
-                                                hirs_str,hirs_com,cloud_frac,cloud_height,\
-                                                gac_bt_cloud_std,gac_bt_all_std,\
-                                                gac_as_hirs_n,hirs_prob,\
-                                                var_obs,var_rtm,var_lat,var_lon,\
+                                                fileobj,hirs_min,hirs_max,cloud_frac,\
+                                                cloud_height,gac_bt_cloud_std,\
+                                                gac_bt_all_std,gac_as_hirs_n,hirs_prob,\
+                                                var_rtm,var_lat,var_lon,\
                                                 var_flag,var_hlat,var_hlon,\
                                                 var_hflag,var_a_obs,var_a_noise,\
-                                                var_hirs_ind,var_hirs_str,var_hirs_com,\
                                                 var_cloud_frac,var_cloud_height,\
                                                 var_cloud_std,var_obs_std,var_n,var_likelihood)
                     

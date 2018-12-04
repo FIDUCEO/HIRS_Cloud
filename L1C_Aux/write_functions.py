@@ -34,14 +34,11 @@ def write_metadata(obj):
 
     return
 
-def var_metadata(var_obs,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
-                     var_hflag,var_a_obs,var_a_noise,var_hirs_ind,var_hirs_str,\
-                     var_hirs_com,var_cloud_frac,var_cloud_height,var_cloud_std,\
+def var_metadata(var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
+                     var_hflag,var_a_obs,var_a_noise\
+                     ,var_cloud_frac,var_cloud_height,var_cloud_std,\
                      var_obs_std,var_n,var_likelihood):
 
-    #HIRS BTs
-    var_obs.units = 'Kelvin'
-    var_obs.long_name = 'HIRS brightness temperatures'
     #HIRS RTM
     var_rtm.units = 'Kelvin'
     var_rtm.long_name = 'RTTOV clear-sky simulations for HIRS channels'
@@ -71,15 +68,6 @@ def var_metadata(var_obs,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
     var_a_noise.comment = 'Channel dimension assigned as follows: 4 channels' \
         + ' [0.6,0.8,3.7,11 micron], 5 channels includes 12 micron, 6 channels' \
         + ' also includes 1.6 micron.'
-    #HIRS Independent Uncertainties
-    var_hirs_ind.units = 'Kelvin'
-    var_hirs_ind.long_name = 'Uncertainty from independent errors'
-    #HIRS Structured Uncertainties
-    var_hirs_str.units = 'Kelvin'
-    var_hirs_str.long_name = 'Uncertainty from structured errors'
-    #HIRS Common Uncertatinties
-    var_hirs_com.units = 'Kelvin'
-    var_hirs_com.long_name = 'Uncertainty from common errors'
     #Cloud fraction
     var_cloud_frac.valid_min ='0'
     var_cloud_frac.valid_max = '1'
@@ -101,9 +89,9 @@ def var_metadata(var_obs,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
     var_likelihood.long_name = 'Clear-sky likelihood'
     var_likelihood.comment = 'Spectral only clear-sky likelihood, not normalised.'
 
-    return var_obs,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
-                     var_hflag,var_a_obs,var_a_noise,var_hirs_ind,var_hirs_str,\
-                     var_hirs_com,var_cloud_frac,var_cloud_height,var_cloud_std,\
+    return var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
+                     var_hflag,var_a_obs,var_a_noise,var_cloud_frac,\
+                     var_cloud_height,var_cloud_std,\
                      var_obs_std,var_n,var_likelihood
 
 
@@ -119,7 +107,6 @@ def create_output(obs,a_obs,time,outfile):
     output.createDimension('y',time.shape[0])
     output.createDimension('x',time.shape[1])
     
-    var_obs = output.createVariable('HIRS_Observations','f',['hirs_channel','y','x'])
     var_rtm = output.createVariable('HIRS_RTM','f',['hirs_channel','y','x'])
     var_lat = output.createVariable('AVHRR_Lat','f',['y','x'])
     var_lon = output.createVariable('AVHRR_Lon','f',['y','x'])
@@ -130,9 +117,6 @@ def create_output(obs,a_obs,time,outfile):
     var_a_obs = output.createVariable('AVHRR_Observations','f',\
                                           ['avhrr_channel','y','x'])
     var_a_noise = output.createVariable('AVHRR_Noise','f',['avhrr_channel','y','x'])
-    var_hirs_ind = output.createVariable('HIRS_independent_unc','f',['hirs_channel','y','x'])
-    var_hirs_str = output.createVariable('HIRS_structured_unc','f',['hirs_channel','y','x'])
-    var_hirs_com = output.createVariable('HIRS_common_unc','f',['hirs_channel','y','x'])
     var_cloud_frac = output.createVariable('Cloud_Fraction','f',['y','x'])
     var_cloud_height = output.createVariable('Cloud_Height','f',['y','x'])
     var_cloud_std = output.createVariable('Cloud_STD','f',['y','x'])
@@ -141,25 +125,25 @@ def create_output(obs,a_obs,time,outfile):
     var_likelihood = output.createVariable('HIRS_likelihood','f',['y','x'])
                                            
 
-    var_obs,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
-        var_hflag,var_a_obs,var_a_noise,var_hirs_ind,var_hirs_str,var_hirs_com,\
-        var_cloud_frac,var_cloud_height,var_cloud_std,var_obs_std,var_n,var_likelihood\
-        = var_metadata(var_obs,var_rtm,var_lat,var_lon,var_flag,\
+    var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
+        var_hflag,var_a_obs,var_a_noise,var_cloud_frac,var_cloud_height,\
+        var_cloud_std,var_obs_std,var_n,var_likelihood\
+        = var_metadata(var_rtm,var_lat,var_lon,var_flag,\
                            var_hlat,var_hlon,var_hflag,var_a_obs,var_a_noise,\
-                           var_hirs_ind,var_hirs_str,var_hirs_com,var_cloud_frac,\
-                           var_cloud_height,var_cloud_std,var_obs_std,var_n,var_likelihood)
-    print var_obs.shape
+                           var_cloud_frac,var_cloud_height,var_cloud_std,\
+                           var_obs_std,var_n,var_likelihood)
 
-    return output,var_obs,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
-        var_hflag,var_a_obs,var_a_noise,var_hirs_ind,var_hirs_str,var_hirs_com,\
-        var_cloud_frac,var_cloud_height,var_cloud_std,var_obs_std,var_n,var_likelihood
+
+    return output,var_rtm,var_lat,var_lon,var_flag,var_hlat,var_hlon,\
+        var_hflag,var_a_obs,var_a_noise,var_cloud_frac,var_cloud_height,\
+        var_cloud_std,var_obs_std,var_n,var_likelihood
 
 def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
-                   output,hirs_min,hirs_max,hirs_ind,hirs_str,hirs_com,cloud_frac,\
-                   cloud_height,cloud_std,obs_std,n,hirs_prob,var_obs,var_rtm,\
+                   output,hirs_min,hirs_max,cloud_frac,cloud_height,\
+                   cloud_std,obs_std,n,hirs_prob,var_rtm,\
                    var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
-                   var_a_noise,var_hirs_ind,var_hirs_str,var_hirs_com,var_cloud_frac,\
-                   var_cloud_height,var_cloud_std,var_obs_std,var_n,var_likelihood):
+                   var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
+                   var_obs_std,var_n,var_likelihood):
 
 
     rtm = np.zeros([obs.shape[0],obs.shape[1],obs.shape[2]])
@@ -170,19 +154,11 @@ def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
     rtm[mask] = obs[mask]-dy[mask]
 
     a_obs = np.swapaxes(a_obs,0,1)
-    hirs_ind = np.swapaxes(hirs_ind,1,2)
-    hirs_ind = np.swapaxes(hirs_ind,0,1)
-    hirs_str = np.swapaxes(hirs_str,1,2)
-    hirs_str = np.swapaxes(hirs_str,0,1)
-    hirs_com = np.swapaxes(hirs_com,1,2)
-    hirs_com = np.swapaxes(hirs_com,0,1)
-
     a_noise = np.swapaxes(a_noise,0,1)
     obs_std = np.swapaxes(obs_std,0,1)
 
     hirs_flag = np.float64(hirs_flag)
 
-    var_obs[:,hirs_min:hirs_max,:] = obs
     var_rtm[:,hirs_min:hirs_max,:] = rtm
     var_lat[hirs_min:hirs_max,:] = lat
     var_lon[hirs_min:hirs_max,:] = lon
@@ -192,9 +168,6 @@ def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
     var_hflag[hirs_min:hirs_max,:] = hirs_flag
     var_a_obs[:,hirs_min:hirs_max,:] = a_obs
     var_a_noise[:,hirs_min:hirs_max,:] = a_noise
-    var_hirs_ind[:,hirs_min:hirs_max,:] = hirs_ind
-    var_hirs_str[:,hirs_min:hirs_max,:] = hirs_str
-    var_hirs_com[:,hirs_min:hirs_max,:] = hirs_com
     var_cloud_frac[hirs_min:hirs_max,:] = cloud_frac
     var_cloud_height[hirs_min:hirs_max,:] = cloud_height
     var_cloud_std[hirs_min:hirs_max,:] = cloud_std
