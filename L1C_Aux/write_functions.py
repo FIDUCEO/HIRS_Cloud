@@ -16,7 +16,8 @@ def get_output_filename(args,fiduceo_fn):
         +'/'+fiduceo_fn[36:38]+'/'
 
     if not os.path.isdir(outdir):
-        os.makedirs(outdir)
+        os.makedirs(outdir,0777)
+
 
     out = outdir+outfile
 
