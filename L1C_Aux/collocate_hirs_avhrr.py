@@ -137,16 +137,16 @@ if __name__ in '__main__':
 
 
                     #Calculate the cloud height
-                    try:
-                        cloud_height = np.zeros([lat_centre.shape[0],lat_centre.shape[1]])
+  #                  try:
+  #                      cloud_height = np.zeros([lat_centre.shape[0],lat_centre.shape[1]])
   #                      mask = (dy[7,:,:] <= 0.)
   #                      cloud_height[mask] = abs(dy[7,:,:][mask])*(1./6.)
   #                      try:
   #                          cloud_height[dy[7,:,:].mask] = -np.nan
   #                      except:
   #                          pass
-                    except:
-                        pass
+  #                  except:
+  #                      pass
 
                     #Write out data
                     outfile = wf.get_output_filename(args,fiduceo_filename)
@@ -165,7 +165,7 @@ if __name__ in '__main__':
                                                 flag_centre,hirs_lat,hirs_lon,\
                                                 hirs_flags,gac_bt_mean,gac_as_hirs_noise,\
                                                 fileobj,hirs_min,hirs_max,cloud_frac,\
-                                                cloud_height,gac_bt_cloud_std,\
+                                                gac_bt_cloud_std,\
                                                 gac_bt_all_std,gac_as_hirs_n,hirs_prob,\
                                                 gac_as_hirs_landmask,var_rtm,var_lat,var_lon,\
                                                 var_flag,var_hlat,var_hlon,\
@@ -177,9 +177,9 @@ if __name__ in '__main__':
 
                     #Make some comparison plots
 
-#                    mask_gac,mask_hirs \
-#                        = pr.plot_geoloc(lat_centre,lon_centre,flag_centre,hirs_lat,\
-#                                          hirs_lon,hirs_flags)
+                    mask_gac,mask_hirs \
+                        = pr.plot_geoloc(lat_centre,lon_centre,flag_centre,hirs_lat,\
+                                          hirs_lon,hirs_flags)
 #                    pr.plot_cloud_char(cloud_frac,gac_bt_std,gac_bt_mean,ch8)
 
 

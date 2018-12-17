@@ -171,7 +171,7 @@ def create_output(obs,a_obs,time,outfile):
         var_landmask
 
 def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
-                   output,hirs_min,hirs_max,cloud_frac,cloud_height,\
+                   output,hirs_min,hirs_max,cloud_frac,\
                    cloud_std,obs_std,n,hirs_prob,landmask,var_rtm,\
                    var_lat,var_lon,var_flag,var_hlat,var_hlon,var_hflag,var_a_obs,\
                    var_a_noise,var_cloud_frac,var_cloud_height,var_cloud_std,\
@@ -202,7 +202,7 @@ def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
     var_a_obs[:,hirs_min:hirs_max,:] = a_obs
     var_a_noise[:,hirs_min:hirs_max,:] = a_noise
     var_cloud_frac[hirs_min:hirs_max,:] = cloud_frac
-    var_cloud_height[hirs_min:hirs_max,:] = cloud_height
+    var_cloud_height[hirs_min:hirs_max,:] = 0.0
     var_cloud_std[hirs_min:hirs_max,:] = cloud_std
     var_obs_std[:,hirs_min:hirs_max,:] = obs_std
     var_n[hirs_min:hirs_max,:] = n

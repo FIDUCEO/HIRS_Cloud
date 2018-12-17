@@ -241,8 +241,11 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
     gac_as_hirs_noise = []
     gac_as_hirs_landmask = []
     #GAC_dy is an optional input argument
+    #Set to something here in case nothing to process in segnment.
     if len(gac_dy) != 1:
          gac_as_hirs_dy = []
+    else:
+        gac_as_hirs_dy = -1
 
     #Extract the relevant parts of the HIRS and GAC orbits where they overlap.
     gac_t = gac_t[gac_min:gac_max,:]
