@@ -194,6 +194,9 @@ def get_landmask(hirs_flags,gac_flags):
     avhrr_landmask[gac_flags == 2] = 1
     avhrr_landmask[gac_flags == 3] = 1
 
+    hirs_landmask = (hirs_landmask == 1)
+    avhrr_landmask = (avhrr_landmask == 1)
+
     return hirs_landmask,avhrr_landmask
 
 
