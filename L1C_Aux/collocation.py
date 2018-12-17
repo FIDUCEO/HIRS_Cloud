@@ -171,9 +171,14 @@ def get_landmask(hirs_flags,gac_flags):
             avhrr_landmask (=1 for land pixels)
     """
 
-    hirs_landmask = hirs_flags&2 != 0
+    hirs_landmask = np.zeros([hirs_flags.shape[0],hirs_flags.shape[1]])
+    avhrr_landmask = np.zeros([gac_flags.shape[0],gac_flags.shape[1]])
+
+    hirs_landmask[hirs_flags&2 != 0] = 1
 
     #Evaluate the L2P flags to extact land mask
+    mask = np.where(gac_flags >= 256)
+    gac_flags[mask] = gac_flags[mask] - 256
     mask = np.where(gac_flags >= 128)
     gac_flags[mask] = gac_flags[mask]-128
     mask = (gac_flags >= 64)
@@ -186,7 +191,8 @@ def get_landmask(hirs_flags,gac_flags):
     gac_flags[mask] = gac_flags[mask]-8
     mask = (gac_flags >= 4)
     gac_flags[mask] = gac_flags[mask]-4
-    avhrr_landmask = (gac_flags == 2)
+    avhrr_landmask[gac_flags == 2] = 1
+    avhrr_landmask[gac_flags == 3] = 1
 
     return hirs_landmask,avhrr_landmask
 
