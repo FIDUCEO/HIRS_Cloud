@@ -13,12 +13,12 @@ import time_and_date_functions as td
 import compare_11_micron as cm
 import write_functions as wf
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 #Base directory paths
-root = '/group_workspaces/cems2/esacci_sst/'
-fiduceo_root = '/group_workspaces/cems2/fiduceo/Data/FCDR/HIRS/v0.8pre2_no_harm/easy/'
+root = '/gws/nopw/j04/esacci_sst/'
+fiduceo_root = '/gws/nopw/j04/fiduceo/Data/FCDR/HIRS/v0.8pre2_no_harm/easy/'
 avhrr_sim_dir = ''
 
 #avhrr_sim_dir = '/group_workspaces/cems2/esacci_sst/output/v2.7.1-50-g2effc4b/l1c/AVHRRMTA_G/'
