@@ -6,7 +6,7 @@ import os
 import time
 import matplotlib.pyplot as plt
 
-out_root = '/group_workspaces/cems2/fiduceo/Data/CDR/hirs_cloud/'
+out_root = '/gws/nopw/j04/fiduceo/Data/CDR/hirs_cloud/'
 
 def get_output_filename(args,fiduceo_fn):
 
@@ -206,7 +206,7 @@ def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
     var_cloud_std[hirs_min:hirs_max,:] = cloud_std
     var_obs_std[:,hirs_min:hirs_max,:] = obs_std
     var_n[hirs_min:hirs_max,:] = n
-    var_likelihood[hirs_min:hirs_max,:] = hirs_prob
+    var_likelihood[hirs_min:hirs_max,:] = np.fliplr(hirs_prob)
     #Add empty arrays over land
     var_rtm_land[:,:,:] = 0.0
     var_likelihood_land[:,:] = 0.0
