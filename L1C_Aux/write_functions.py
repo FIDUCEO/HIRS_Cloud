@@ -192,12 +192,15 @@ def write_data(obs,dy,lat,lon,flag,hirs_lat,hirs_lon,hirs_flag,a_obs,a_noise,\
 
     hirs_flag = np.float64(hirs_flag)
 
+    for i in np.arange(0,19):
+        rtm[i,:,:] = np.fliplr(rtm[i,:,:])
+
     var_rtm[:,hirs_min:hirs_max,:] = rtm
     var_lat[hirs_min:hirs_max,:] = lat
     var_lon[hirs_min:hirs_max,:] = lon
     var_flag[hirs_min:hirs_max,:] = flag
-    var_hlat[hirs_min:hirs_max,:] = hirs_lat
-    var_hlon[hirs_min:hirs_max,:] = hirs_lon
+    var_hlat[hirs_min:hirs_max,:] = np.fliplr(hirs_lat)
+    var_hlon[hirs_min:hirs_max,:] = np.fliplr(hirs_lon)
     var_hflag[hirs_min:hirs_max,:] = hirs_flag
     var_a_obs[:,hirs_min:hirs_max,:] = a_obs
     var_a_noise[:,hirs_min:hirs_max,:] = a_noise
