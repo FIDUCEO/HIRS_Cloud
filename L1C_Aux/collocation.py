@@ -171,6 +171,8 @@ def get_landmask(hirs_flags,gac_flags):
             avhrr_landmask (=1 for land pixels)
     """
 
+    hirs_flags = np.fliplr(hirs_flags)
+
     hirs_landmask = np.zeros([hirs_flags.shape[0],hirs_flags.shape[1]])
     avhrr_landmask = np.zeros([gac_flags.shape[0],gac_flags.shape[1]])
 
