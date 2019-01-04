@@ -120,9 +120,14 @@ def eval_cloud_mask(cloud_array,bt_array):
     """
     
     #Set invalid pclear pixels = nan
-    mask = np.where(np.logical_or(cloud_array < 0.0, bt_array < 0.0))[0]
+    #Masking is based on the AVHRR Bayes mask only.  For this to be calculated there
+    #should be valid input channel data.  Check to see if there are any cases where
+    #pclear is valid with invalid input data.
+    mask = cloud_array < 0.
     cloud_array[mask] = np.nan
-    bt_array[:,mask] = np.nan
+    for i in np.arange(0,bt_array.shape[0]):
+        bt_array[i,:][mask] = np.nan
+
     #Calculate pclear min and mean.
     cloud_mask_min = np.nanmin(cloud_array)
     cloud_mask_mean = np.nanmean(cloud_array)
@@ -366,7 +371,6 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
                 bt_std_cloud[j] = np.nan
                 bt_std_all[:,j] = np.nan
                 extract_n[j] = np.nan
-
 
         #Concatenate output
         lon_centre = concatenate(lon_centre,extract_lon,i)
