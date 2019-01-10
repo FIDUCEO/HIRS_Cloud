@@ -56,7 +56,7 @@ def getgacpix(hirs_spot, dtime, hirs_sensor):
 
     if hirs_sensor.lower() in HIRS2:   
         IFOV = math.radians(1.22)
-    elif hirs_sensor.lower() in HIRS2i or hirs_sensor in HIRS3:
+    elif hirs_sensor.lower() in HIRS2i or hirs_sensor.lower() in HIRS3:
         IFOV = math.radians(1.4)
     elif hirs_sensor.lower() in HIRS4:
         IFOV = math.radians(0.69) 
