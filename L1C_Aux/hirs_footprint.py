@@ -54,11 +54,11 @@ def getgacpix(hirs_spot, dtime, hirs_sensor):
     HIRS4 = ('noaa18','noaa19','metopa','metopb')
 
 
-    if hirs_sensor in HIRS2:   
+    if hirs_sensor.lower() in HIRS2:   
         IFOV = math.radians(1.22)
-    elif hirs_sensor in HIRS2i or hirs_sensor in HIRS3:
+    elif hirs_sensor.lower() in HIRS2i or hirs_sensor in HIRS3:
         IFOV = math.radians(1.4)
-    elif hirs_sensor in HIRS4:
+    elif hirs_sensor.lower() in HIRS4:
         IFOV = math.radians(0.69) 
                               # HIRS/2 IFOV ~= 0.0213 radians.
                               # HIRS/2i/3 is 1.4 degrees, HIRS/4 is 0.69 degrees.
