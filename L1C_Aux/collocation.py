@@ -209,7 +209,7 @@ def get_landmask(hirs_flags,gac_flags):
 
 def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
                            gac_lat,gac_lon,gac_flags,hirs_flags,gac_prob,avhrr_obs,\
-                           avhrr_noise,gac_dy=-1):
+                           avhrr_noise,hirs_sens,gac_dy=-1):
 
     """
     Collocate GAC and HIRS using time arrays and Andy's function for locating GAC 
@@ -303,7 +303,7 @@ def collocate_gac_hirs(gac_t,hirs_t,gac_min,gac_max,hirs_min,hirs_max,\
 #            dtime = gac_t[baseline[j]][0]-hirs_time
             dtime = hirs_time-gac_t[baseline[j]][0]
             
-            use_arr,x0,a,b,nx,ny,ix0 = hf.getgacpix(j,dtime)
+            use_arr,x0,a,b,nx,ny,ix0 = hf.getgacpix(j,dtime,hirs_sens)
             width = int(np.floor(use_arr.shape[1]/2.))
             height = int(np.floor(use_arr.shape[0]/2.))
 

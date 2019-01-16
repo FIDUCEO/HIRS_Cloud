@@ -27,7 +27,7 @@ def alpha2km(alpha, R, h):
 
     return km
 
-def getgacpix(hirs_spot, dtime):
+def getgacpix(hirs_spot, dtime, hirs_sensor):
 
     """
     Determine which GAC pixels fall into each HIRS footprint.  Pixels are
@@ -46,8 +46,21 @@ def getgacpix(hirs_spot, dtime):
     #----------------------------
     h = 819.      #Nominal METOP-A orbital height
     R = 6372.     #Earth Radius
-    speed = 6.7   #Ground-track speed in km.s-1    
-    IFOV = math.radians(1.22) # HIRS/2 IFOV ~= 0.0213 radians.
+    speed = 6.7   #Ground-track speed in km.s-1
+
+    HIRS2 = ('noaa08','noaa09','noaa10','noaa12','noaa14')
+    HIRS2i = ('noaa11','noaa14')
+    HIRS3 = ('noaa15','noaa16','noaa17')
+    HIRS4 = ('noaa18','noaa19','metopa','metopb')
+
+
+    if hirs_sensor.lower() in HIRS2:   
+        IFOV = math.radians(1.22)
+    elif hirs_sensor.lower() in HIRS2i or hirs_sensor.lower() in HIRS3:
+        IFOV = math.radians(1.4)
+    elif hirs_sensor.lower() in HIRS4:
+        IFOV = math.radians(0.69) 
+                              # HIRS/2 IFOV ~= 0.0213 radians.
                               # HIRS/2i/3 is 1.4 degrees, HIRS/4 is 0.69 degrees.
     nu   = math.radians(1.8)  # 1.8 degree step angle ~=0.0314 radians
     nIFOVs = 56               #Number of HIRS FOVs
@@ -121,7 +134,7 @@ if __name__ in '__main__':
         dtime = 0.2
         y0 = dtime*2.
     
-        use_arr,x0,a,b,nx,ny,ix0 = getgacpix(i,dtime)
+        use_arr,x0,a,b,nx,ny,ix0 = getgacpix(i,dtime,hirs_sensor)
 
         for x in np.arange(0,th.shape[0],1):
             x_plot_arr[x] = x0+a*math.cos(th[x])

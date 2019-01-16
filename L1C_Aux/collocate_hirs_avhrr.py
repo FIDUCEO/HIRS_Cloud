@@ -133,7 +133,7 @@ if __name__ in '__main__':
                         = col.collocate_gac_hirs(time_gac,time_hirs,gac_min,gac_max,\
                                                      hirs_min,hirs_max,gac_lat,gac_lon,\
                                                      gac_flags,hirs_flags,gac_prob,\
-                                                     avhrr_obs,avhrr_noise,gac_dy)
+                                                     avhrr_obs,avhrr_noise,args.hirs_sensor,gac_dy)
 
 
                     #Calculate the cloud height
