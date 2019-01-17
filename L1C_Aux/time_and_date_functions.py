@@ -54,7 +54,6 @@ def time_mask(time_hirs,time_gac):
     gd_hirs &= hirs_t < np.max(gac_t[gd_gac])
     if len(hirs_t[gd_hirs]) == 0:
         #Add loop to identify out places where times overlap but no data is available
-        print "Your loop worked James"
         hirs_min = 0.0
         hirs_max = 0.0
         data_check = False
