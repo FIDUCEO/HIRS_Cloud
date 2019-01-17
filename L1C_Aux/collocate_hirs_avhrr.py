@@ -56,10 +56,9 @@ if __name__ in '__main__':
     prev,next = td.get_dates(in_date)
 
     string_date_hirs = in_date[0:4]+'/'+in_date[4:6]+'/'+in_date[6:8]+'/'
-    loopcount = 1
+    
     for f in os.listdir(hirs_dir+string_date_hirs):
-        print "loopcount = ",loopcount,"file = ",f
-        loopcount = loopcount+1
+
         fiduceo_filename = rf.construct_fiduceo(fiduceo_dir,string_date_hirs,f)
         time_hirs = rf.read_time(hirs_dir+string_date_hirs+f)
         
