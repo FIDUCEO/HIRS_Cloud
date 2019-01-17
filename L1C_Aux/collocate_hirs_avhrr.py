@@ -17,7 +17,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 #Base directory paths
-root = '/group_workspaces/cems2/esacci_sst/'
+root = '/gws/nopw/j04/esacci_sst/'
 fiduceo_root = '/gws/nopw/j04/fiduceo/Data/FCDR/HIRS/v0.8pre2_no_harm/easy/'
 avhrr_sim_dir = ''
 
