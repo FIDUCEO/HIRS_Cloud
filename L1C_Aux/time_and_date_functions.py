@@ -43,7 +43,6 @@ def time_mask(time_hirs,time_gac):
     #There is only one time per scanline so keep the arrays two dimensional.
     hirs_t = time_hirs[:,0]
     gac_t = time_gac[:,0]
-    
     gd_gac = gac_t > np.min(hirs_t)
     gd_gac &= gac_t < np.max(hirs_t)
     minimum = np.argwhere(gac_t == gac_t[gd_gac][0])
@@ -53,9 +52,17 @@ def time_mask(time_hirs,time_gac):
 
     gd_hirs = hirs_t > np.min(gac_t[gd_gac])
     gd_hirs &= hirs_t < np.max(gac_t[gd_gac])
-    minimum = np.argwhere(hirs_t == hirs_t[gd_hirs][0])
-    maximum = np.argwhere(hirs_t == hirs_t[gd_hirs][-1])
-    hirs_min = int(minimum[0])
-    hirs_max = int(maximum[0])
+    if len(hirs_t[gd_hirs]) == 0:
+        #Add loop to identify out places where times overlap but no data is available
+        print "Your loop worked James"
+        hirs_min = 0.0
+        hirs_max = 0.0
+        data_check = False
+    else:
+        minimum = np.argwhere(hirs_t == hirs_t[gd_hirs][0])
+        maximum = np.argwhere(hirs_t == hirs_t[gd_hirs][-1])
+        hirs_min = int(minimum[0])
+        hirs_max = int(maximum[0])
+        data_check = True
 
-    return gac_min,gac_max,hirs_min,hirs_max
+    return gac_min,gac_max,hirs_min,hirs_max,data_check
