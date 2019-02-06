@@ -48,7 +48,7 @@ def getgacpix(hirs_spot, dtime, hirs_sensor):
     R = 6372.     #Earth Radius
     speed = 6.7   #Ground-track speed in km.s-1
 
-    HIRS2 = ('noaa08','noaa09','noaa10','noaa12','noaa14')
+    HIRS2 = ('noaa08','noaa09','noaa10','noaa12')
     HIRS2i = ('noaa11','noaa14')
     HIRS3 = ('noaa15','noaa16','noaa17')
     HIRS4 = ('noaa18','noaa19','metopa','metopb')
