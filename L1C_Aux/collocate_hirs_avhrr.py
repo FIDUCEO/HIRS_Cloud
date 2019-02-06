@@ -56,7 +56,7 @@ if __name__ in '__main__':
     prev,next = td.get_dates(in_date)
 
     string_date_hirs = in_date[0:4]+'/'+in_date[4:6]+'/'+in_date[6:8]+'/'
-
+    
     for f in os.listdir(hirs_dir+string_date_hirs):
 
         fiduceo_filename = rf.construct_fiduceo(fiduceo_dir,string_date_hirs,f)
@@ -69,13 +69,12 @@ if __name__ in '__main__':
         fileobj = -1
 
         for date in [prev,in_date,next]:
-
             string_date = date[0:4]+'/'+date[4:6]+'/'+date[6:8]+'/'
 
-            for g in os.listdir(gac_dir+string_date):
-            
-                time_gac = rf.read_time(gac_dir+string_date+g)
 
+            
+            for g in os.listdir(gac_dir+string_date):
+                time_gac = rf.read_time(gac_dir+string_date+g)               
                 #Identify files where the HIRS/AVHRR times overlap
                 if np.min(time_gac) > np.max(time_hirs):
                     continue
@@ -84,35 +83,36 @@ if __name__ in '__main__':
                 else:
                     print 'overlap'
                     #Identify overlap times for GAC and HIRS
-                    gac_min,gac_max,hirs_min,hirs_max \
+                    gac_min,gac_max,hirs_min,hirs_max,data_check \
                         = td.time_mask(time_hirs,time_gac)
+                    if data_check == True:
                     #Read in for GAC and HIRS: lat,lon and l2 flags
-                    gac_lat,gac_lon,gac_flags \
+                        gac_lat,gac_lon,gac_flags \
                         = rf.refine_geo(gac_dir+string_date+g,gac_min,gac_max)
-                    hirs_lat,hirs_lon,hirs_flags \
+                        hirs_lat,hirs_lon,hirs_flags \
                         = rf.refine_geo(hirs_dir+string_date_hirs+f,\
                                          hirs_min,hirs_max)
 
                     #Read in GAC and HIRS BT
-                    hirs_bt,hirs_noise,hirs_obs,hirs_ind,hirs_str,hirs_com\
+                        hirs_bt,hirs_noise,hirs_obs,hirs_ind,hirs_str,hirs_com\
                         = rf.read_hirs_obs(fiduceo_dir+string_date_hirs \
                                                +fiduceo_filename,hirs_min,hirs_max)
-                    l1c_filename = rf.construct_l1c(l1c_dir,string_date,g,gac_dir)
-                    print l1c_filename
-                    gac_bt,avhrr_obs,avhrr_noise \
+                        l1c_filename = rf.construct_l1c(l1c_dir,string_date,g,gac_dir)
+                        print l1c_filename
+                        gac_bt,avhrr_obs,avhrr_noise \
                         = rf.read_avhrr_obs(l1c_dir+string_date+l1c_filename,\
                                                 gac_min,gac_max,args.hirs_sensor)
 
-                    if os.path.isfile(avhrr_sim_dir+string_date+g):
-                        gac_dy = rf.read_dy(avhrr_sim_dir+string_date+g,gac_min,\
+                        if os.path.isfile(avhrr_sim_dir+string_date+g):
+                            gac_dy = rf.read_dy(avhrr_sim_dir+string_date+g,gac_min,\
                                                 gac_max)
-                    else:
-                        gac_dy=np.zeros([1])
+                        else:
+                            gac_dy=np.zeros([1])
 
                     #Read in the PClear arrays
-                    gac_prob = rf.read_pclear(gac_dir+string_date+g,gac_min,gac_max)
+                        gac_prob = rf.read_pclear(gac_dir+string_date+g,gac_min,gac_max)
             
-                    hirs_prob = rf.read_pclear(hirs_dir+string_date_hirs+f,hirs_min,\
+                        hirs_prob = rf.read_pclear(hirs_dir+string_date_hirs+f,hirs_min,\
                                                 hirs_max)
 
                     #### Extra probabilities from different runs - move from
@@ -123,10 +123,10 @@ if __name__ in '__main__':
 #                                                hirs_max)
 
                     #Read in the dY arrays
-                    dy = rf.read_ffm(hirs_dir+string_date_hirs+f,hirs_min,hirs_max)
+                        dy = rf.read_ffm(hirs_dir+string_date_hirs+f,hirs_min,hirs_max)
 
                     #Co-locate the GAC and HIRS arrays
-                    lat_centre,lon_centre,flag_centre,gac_as_hirs_min,\
+                        lat_centre,lon_centre,flag_centre,gac_as_hirs_min,\
                         gac_as_hirs_mean,gac_bt_mean,gac_bt_cloud_std,gac_bt_all_std,\
                         cloud_frac,gac_as_hirs_dy,gac_as_hirs_n,gac_as_hirs_noise, \
                         gac_as_hirs_landmask \
@@ -149,19 +149,19 @@ if __name__ in '__main__':
   #                      pass
 
                     #Write out data
-                    outfile = wf.get_output_filename(args,fiduceo_filename)
+                        outfile = wf.get_output_filename(args,fiduceo_filename)
 
-                    if fileobj == -1:
-                        fileobj,var_rtm,var_lat,var_lon,var_flag,\
-                            var_hlat,var_hlon,var_hflag,var_a_obs,var_a_noise, \
-                            var_cloud_frac,var_cloud_height,var_cloud_std,\
-                            var_obs_std,var_n,var_likelihood,var_rtm_land, \
-                            var_likelihood_land,var_landmask \
-                            = wf.create_output(hirs_obs,avhrr_obs,\
+                        if fileobj == -1:
+                            fileobj,var_rtm,var_lat,var_lon,var_flag,\
+                                var_hlat,var_hlon,var_hflag,var_a_obs,var_a_noise, \
+                                var_cloud_frac,var_cloud_height,var_cloud_std,\
+                                var_obs_std,var_n,var_likelihood,var_rtm_land, \
+                                var_likelihood_land,var_landmask \
+                                = wf.create_output(hirs_obs,avhrr_obs,\
                                                    time_hirs,outfile)
 
  
-                    fileobj = wf.write_data(hirs_obs,dy,lat_centre,lon_centre,\
+                        fileobj = wf.write_data(hirs_obs,dy,lat_centre,lon_centre,\
                                                 flag_centre,hirs_lat,hirs_lon,\
                                                 hirs_flags,gac_bt_mean,gac_as_hirs_noise,\
                                                 fileobj,hirs_min,hirs_max,cloud_frac,\
@@ -177,7 +177,7 @@ if __name__ in '__main__':
 
                     #Make some comparison plots
 
-                    mask_gac,mask_hirs \
+                        mask_gac,mask_hirs \
                         = pr.plot_geoloc(lat_centre,lon_centre,flag_centre,hirs_lat,\
                                           hirs_lon,hirs_flags)
 #                    pr.plot_cloud_char(cloud_frac,gac_bt_std,gac_bt_mean,ch8)
