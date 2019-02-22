@@ -106,12 +106,10 @@ if __name__ in '__main__':
                             hirs_bt,hirs_noise,hirs_obs,hirs_ind,hirs_str,hirs_com\
                             = rf.read_hirs_obs(fiduceo_dir+string_date_hirs \
                                                    +fiduceo_filename,hirs_min,hirs_max)
-                            #l1c_filename = rf.construct_l1c(l1c_dir,string_date,g,gac_dir)
-                            #print "l1c_dir = ",l1c_dir
-                            #print "g = ",g
-                            #print "string_date = ",string_date
-                            #print "gac_dir = ", gac_dir
+
                             l1c_filename = rf.construct_l1c(l1c_dir,string_date,g,gac_dir)
+                            
+                            # Code now attempts to find file with matching hour start time
                             try:
                                 os.path.isfile(l1c_dir+string_date+l1c_filename)
                                 #l1c_filename = rf.construct_l1c(l1c_dir,string_date,g,gac_dir)
@@ -123,7 +121,10 @@ if __name__ in '__main__':
                                                     gac_max)
                                 else:
                                     gac_dy=np.zeros([1])
-                                gac_prob = rf.read_pclear(gac_dir+string_date+g,gac_min,gac_max)                            
+                                gac_prob = rf.read_pclear(gac_dir+string_date+g,gac_min,gac_max)
+                                
+                            # If hour-matched start time is missed, it now finds the closest in time and replaces 
+                            # l1c_filename with the a new version which contains the time of the nearest file
                             except:
                                 print "Mismatched file found in l2p and l1c for: ",g
                                 old_g_time = int(g[8:14])
@@ -132,9 +133,6 @@ if __name__ in '__main__':
                                 new_g_time = closest(old_g_time,newlist)
                                 new_g = str(g[:8])+str(new_g_time)+str(g[14:])
                                 new_l1c_filename = str(l1c_filename[:8])+str(new_g_time)+str(l1c_filename[14:])
-                                #print "New g made: ",new_g
-                                #print "Old l1c_filename: ",l1c_filename
-                                #l1c_filename = rf.construct_l1c(l1c_dir,string_date,new_g,gac_dir)
                                 print "New l1c_filename: ",new_l1c_filename
                                 gac_bt,avhrr_obs,avhrr_noise \
                                 = rf.read_avhrr_obs(l1c_dir+string_date+new_l1c_filename,\
@@ -145,14 +143,7 @@ if __name__ in '__main__':
                                 else:
                                     gac_dy=np.zeros([1])
                                 gac_prob = rf.read_pclear(gac_dir+string_date+g,gac_min,gac_max)
-                            #if os.path.isfile(avhrr_sim_dir+string_date+g):
-                                #gac_dy = rf.read_dy(avhrr_sim_dir+string_date+g,gac_min,\
-                                                    #gac_max)
-                            #else:
-                                #gac_dy=np.zeros([1])
 
-                        #Read in the PClear arrays
-                            #gac_prob = rf.read_pclear(gac_dir+string_date+g,gac_min,gac_max)
 
                             hirs_prob = rf.read_pclear(hirs_dir+string_date_hirs+f,hirs_min,\
                                                     hirs_max)
