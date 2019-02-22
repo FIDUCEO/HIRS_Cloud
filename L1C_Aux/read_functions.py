@@ -167,11 +167,12 @@ def construct_fiduceo(fiduceo_dir,string_date_hirs,infile):
         instrument = instrument[:-1]
     acq_time = infile[0:10]
 
-    print instrument,acq_time
-    print fiduceo_dir+string_date_hirs
+    #print instrument,acq_time
+    #print fiduceo_dir+string_date_hirs
 
     pattern = 'FIDUCEO_FCDR_L1C_HIRS*_'+instrument+'_'+acq_time+'*.nc'
-    print pattern
+    #print pattern
+    #print 'list of files: ',os.listdir(fiduceo_dir+string_date_hirs)
     filename = fnmatch.filter(os.listdir(fiduceo_dir+string_date_hirs),pattern)[0]
 
     return filename
